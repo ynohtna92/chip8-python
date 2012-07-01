@@ -98,7 +98,6 @@ class Chip8:
 			print hex(self.opcode), ' ', 
 			try:
 				self.case_main[self.opcode & 0xF000]()
-				self.pc +=2
 			except KeyError:
 				print 'opcode error'
 			if self.delay_timer > 0:
@@ -109,14 +108,14 @@ class Chip8:
 				self.sound_timer-=1
 
 	def debugRender(self):
-		'''for y in range(32):
+		for y in range(32):
 			for x in range(64):
 				if self.gfx[(y*64)+x]:
 				   print '0',
 				else:
 				   print ' ',
 			print ''
-		print '''
+		print ''
 		pass
 
 	def loadApplication(self, file_name):
