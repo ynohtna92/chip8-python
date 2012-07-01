@@ -10,7 +10,11 @@ def main(argv):
 
 	c8= chip8.Chip8()
 	c8.loadApplication(game_path)
-	print c8.memory
+	
+	while 1:
+		c8.emulateCycle()
+		if c8.drawFlag:
+			c8.debugRender()
 
 if __name__ == "__main__":
 	sys.exit(main(sys.argv))

@@ -39,8 +39,19 @@ class Chip8:
 		drawFlag = True
 		for i in range(len(chip8_fontset)):
 			self.memory[i]= chip8_fontset[i]
+
 	def emulateCycle(self):
 		pass
+
+	def debugRender(self):
+		for y in range(32):
+			for x in range(64):
+				if gfx[(y*64)+x]
+				   print '0',
+				else:
+				   print ' ',
+			print ''
+		print ''
 
 	def loadApplication(self, file_name):
 		buffer_app = []
