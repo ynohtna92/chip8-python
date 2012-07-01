@@ -10,9 +10,11 @@ def main(argv):
 
 	c8= chip8.Chip8()
 	c8.loadApplication(game_path)
-	
+	print c8.memory
 	while 1:
 		c8.emulateCycle()
+		if c8.debug_len+512 <= c8.pc:
+			break
 		if c8.drawFlag:
 			c8.debugRender()
 
