@@ -61,10 +61,40 @@ class Chip8:
 			0xE000: self.xENNN,
 			0xF000: self.xFNNN,
                 }
+		self.case_0x0000 = {
+			0x0000: self.x00E0,
+			0x000E: self.x000E
+		}
+		self.case_0x8000 = {
+			0x0000: self.x8XY0,
+			0x0001: self.x8XY1,
+			0x0002: self.x8XY2,
+			0x0003: self.x8XY3,
+			0x0004: self.x8XY4,
+			0x0005: self.x8XY5,
+			0x0006: self.x8XY6,
+			0x0007: self.x8XY7,
+			0x000E: self.x8XYE
+		}
+		self.case_0xE000 = {
+                        0x009E: self.xEX9E,
+                        0x000A: self.xEXA1
+		}
+		self.case_0xF000 = {
+			0x0007: self.xFX07,
+			0x000A: self.xFX0A,
+			0x0015: self.xFX15,
+			0x0018: self.xFX18,
+			0x001E: self.xFX1E,
+			0x0029: self.xFX29,
+			0x0033: self.xFX33,
+			0x0055: self.xFX55,
+			0x0065: self.xFX65,
+		}
 
 	def emulateCycle(self):
 			self.opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
-			print self.opcode, ' ' , self.pc
+			print hex(self.opcode), ' ', 
 			try:
 				self.case_main[self.opcode & 0xF000]()
 				self.pc +=2
@@ -93,7 +123,10 @@ class Chip8:
 		app_file.close()
 
 	def x0NNN(self):
-		print 'x0NNN'
+		try:
+			self.case_0x0000[self.opcode & 0x000F]()
+		except KeyError:
+			print 'opcode error 0x0NNN'
         def x1NNN(self):
                 print 'x1NNN'
         def x2NNN(self):
@@ -109,7 +142,10 @@ class Chip8:
         def x7NNN(self):
                 print 'x7NNN'
         def x8NNN(self):
-                print 'x8NNN'
+                try:
+                        self.case_0x8000[self.opcode & 0x000F]()
+                except KeyError:
+                        print 'opcode error 0x8NNN'
         def x9NNN(self):
                 print 'x9NNN'
         def xANNN(self):
@@ -121,6 +157,64 @@ class Chip8:
         def xDNNN(self):
                 print 'xDNNN'
         def xENNN(self):
-                print 'xENNN'
+                try:
+                        self.case_0xE000[self.opcode & 0x00FF]()
+                except KeyError:
+                        print 'opcode error 0xENNN'
         def xFNNN(self):
-                print 'xFNNN'
+                try:
+                        self.case_0xF000[self.opcode & 0x00FF]()
+                except KeyError:
+                        print 'opcode error 0xFNNN'
+
+	'''0NNN case'''
+        def x00E0(self):
+                print 'x00E0'
+        def x000E(self):
+                print 'x000E'
+
+	'''x8NNN case'''
+        def x8XY0(self):
+                print 'x8XY0'
+        def x8XY1(self):
+                print 'x8XY1'
+        def x8XY2(self):
+                print 'x8XY2'
+        def x8XY3(self):
+                print 'x8XY3'
+        def x8XY4(self):
+                print 'x8XY4'
+        def x8XY5(self):
+                print 'x8XY5'
+        def x8XY6(self):
+                print 'x8XY6'
+        def x8XY7(self):
+                print 'x8XY7'
+        def x8XYE(self):
+                print 'x8XYE'
+
+	'''xENNN case'''
+        def xEX9E(self):
+                print 'xEX9E'
+        def xEXA1(self):
+                print 'xEXA1'
+
+	'''xFNNN case'''
+        def xFX07(self):
+                print 'xFX07'
+        def xFX0A(self):
+                print 'xFX0A'
+        def xFX15(self):
+                print 'xFX15'
+        def xFX18(self):
+                print 'xFX18'
+        def xFX1E(self):
+                print 'xFX1E'
+        def xFX29(self):
+                print 'xFX29'
+        def xFX33(self):
+                print 'xFX33'
+        def xFX55(self):
+                print 'xFX55'
+        def xFX65(self):
+                print 'xFX65'
