@@ -27,8 +27,8 @@ def main(argv):
 	glutReshapeFunc(reshape)
 	glutDisplayFunc(display)
 	glutIdleFunc(display)
-	'''glutKeyboardFunc(keyboardDown)
-	glutKeyboardUpFunc(keyboardUp)'''
+	glutKeyboardFunc(keyboardDown)
+	glutKeyboardUpFunc(keyboardUp)
 	
 	setupTexture()
 	
@@ -103,9 +103,49 @@ def reshape(w, h):
    gfx_width = w
    gfx_hight =h
 
-def keyboardDown():
-	pass
-def keyboardUp():
-	pass
+def keyboardDown(key, x, y):
+	if key is chr(27): sys.exit(1)
+
+	if key is '1': c8.key[0x1] = 1
+	elif key is '2': c8.key[0x2] = 1
+	elif key is '3': c8.key[0x3] = 1
+	elif key is '4': c8.key[0xC] = 1
+
+	elif key is 'q': c8.key[0x4] = 1
+	elif key is 'w': c8.key[0x5] = 1	
+	elif key is 'e': c8.key[0x6] = 1
+	elif key is 'r': c8.key[0xD] = 1
+
+	elif key is 'a': c8.key[0x7] = 1
+	elif key is 's': c8.key[0x8] = 1
+	elif key is 'd': c8.key[0x9] = 1
+	elif key is 'f': c8.key[0xE] = 1
+
+	elif key is 'z': c8.key[0xA] = 1
+	elif key is 'e': c8.key[0x0] = 1
+	elif key is 'c': c8.key[0xB] = 1
+	elif key is 'v': c8.key[0xF] = 1
+
+def keyboardUp(key, x ,y):
+        if key is '1': c8.key[0x1] = 0
+        elif key is '2': c8.key[0x2] = 0
+        elif key is '3': c8.key[0x3] = 0
+        elif key is '4': c8.key[0xC] = 0
+        
+        elif key is 'q': c8.key[0x4] = 0
+        elif key is 'w': c8.key[0x5] = 0
+        elif key is 'e': c8.key[0x6] = 0
+        elif key is 'r': c8.key[0xD] = 0
+
+        elif key is 'a': c8.key[0x7] = 0
+        elif key is 's': c8.key[0x8] = 0
+        elif key is 'd': c8.key[0x9] = 0
+        elif key is 'f': c8.key[0xE] = 0
+
+        elif key is 'z': c8.key[0xA] = 0
+        elif key is 'e': c8.key[0x0] = 0
+        elif key is 'c': c8.key[0xB] = 0
+        elif key is 'v': c8.key[0xF] = 0
+
 if __name__ == "__main__":
 	sys.exit(main(sys.argv))

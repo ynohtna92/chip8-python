@@ -136,7 +136,7 @@ class Chip8:
         def x2NNN(self):
                 print 'x2NNN'
 		self.stack[self.sp] = self.pc
-		self.pc+=1
+		self.sp+=1
 		self.pc = self.opcode & 0x0FFF
         def x3NNN(self):
                 print 'x3NNN'
@@ -184,7 +184,7 @@ class Chip8:
 		self.pc = (self.opcode & 0x0FFF)+self.V[0]
         def xCNNN(self):
                 print 'xCNNN'
-		self.V[(self.opcode & 0x0F00) >> 8] = (randint(1,32767) % 0xFF) & (self.opcode & 0x00FF)
+		self.V[(self.opcode & 0x0F00) >> 8] = (randint(1,2767) % 0xFF) & (self.opcode & 0x00FF)
 		self.pc +=2
         def xDNNN(self):
                 print 'xDNNN'
@@ -201,7 +201,7 @@ class Chip8:
 				if (pixel & ( 0x80 >> xline)) is not 0:
 					print (x + xline + ((y+yline)*64)), 'nyan', x , xline ,y, yline
 					if self.gfx[(x + xline + ((y+yline)*64))]:
-						V[0xF] = 1
+						self.V[0xF] = 1
 					self.gfx[(x + xline + ((y+yline)*64))] ^= 1
 		self.drawFlag = True;
 		self.pc +=2;
@@ -279,7 +279,7 @@ class Chip8:
                 print 'x8XYE'
 		self.V[0xF] = self.V[(self.opcode & 0x0F00) >> 8] >> 7
 		self.V[(self.opcode & 0x0F00) >> 8] <<=1
-		pc+=2
+		self.pc+=2
 
 	'''xENNN case'''
         def xEX9E(self):
@@ -333,9 +333,9 @@ class Chip8:
 		self.pc+=2
         def xFX33(self):
                 print 'xFX33'
-		self.memory[I] = self.V[(self.opcode & 0x0F00) >> 8] / 100
-		self.memory[I+1] = (self.V[(self.opcode & 0x0F00) >> 8] / 10) % 10
-		self.memory[I+2] = (self.V[(self.opcode & 0x0F00) >> 8] % 100) % 10
+		self.memory[self.I] = self.V[(self.opcode & 0x0F00) >> 8] / 100
+		self.memory[self.I+1] = (self.V[(self.opcode & 0x0F00) >> 8] / 10) % 10
+		self.memory[self.I+2] = (self.V[(self.opcode & 0x0F00) >> 8] % 100) % 10
 		self.pc+=2
         def xFX65(self):
                 print 'xFX65'
