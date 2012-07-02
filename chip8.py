@@ -34,9 +34,6 @@ class Chip8:
 		self.memory = [0 for x in range(4096)]
 		self.V = [0 for x in range(16)]
 
-		'''remove this'''
-		self.debug_len = 0
-
 		self.delay_timer = 0
 		self.sound_timer = 0
 		
@@ -120,10 +117,10 @@ class Chip8:
 
 	def loadApplication(self, file_name):
 		buffer_app = []
+		print 'nya'
 		app_file = open(file_name,'rb')
 		for b in app_file.read():
 			buffer_app.append(int(b.encode('hex'), 16))
-		self.debug_len = len(buffer_app)
 		for i in range(len(buffer_app)):
 			self.memory[i+512]=buffer_app[i]
 		app_file.close()
