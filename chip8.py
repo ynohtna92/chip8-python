@@ -76,7 +76,7 @@ class Chip8:
 		}
 		self.case_0xE000 = {
                         0x009E: self.xEX9E,
-                        0x000A: self.xEXA1
+                        0x00A1: self.xEXA1
 		}
 		self.case_0xF000 = {
 			0x0007: self.xFX07,
@@ -162,7 +162,8 @@ class Chip8:
 		self.pc += 2
         def x7NNN(self):
                 print 'x7NNN'
-                self.V[(self.opcode & 0x0F00) >> 8] += self.opcode & 0x00FF
+		self.V[(self.opcode & 0x0F00) >> 8] += self.opcode & 0x00FF
+		if (self.opcode & 0x00FF) >= 255: self.V[(self.opcode & 0x0F00) >> 8] -= (self.opcode & 0x00FF)+1
                 self.pc += 2
         def x8NNN(self):
                 try:
@@ -200,7 +201,7 @@ class Chip8:
 			for xline in range(8):
 				if (pixel & ( 0x80 >> xline)) is not 0:
 					print (x + xline + ((y+yline)*64)), 'nyan', x , xline ,y, yline
-					if self.gfx[(x + xline + ((y+yline)*64))]:
+					if self.gfx[(x + xline + ((y+yline)*64))] is 1:
 						self.V[0xF] = 1
 					self.gfx[(x + xline + ((y+yline)*64))] ^= 1
 		self.drawFlag = True;
