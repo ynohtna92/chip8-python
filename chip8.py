@@ -28,11 +28,11 @@ class Chip8:
 		self.I = 0
 		self.sp = 0
 
-		self.gfx = [0 for x in range(64*32)]
-		self.stack = [0 for x in range(16)]
-		self.key = [0 for x in range(16)]
-		self.memory = [0 for x in range(4096)]
-		self.V = [0 for x in range(16)]
+		self.gfx = [0 for x in xrange(64*32)]
+		self.stack = [0 for x in xrange(16)]
+		self.key = [0 for x in xrange(16)]
+		self.memory = [0 for x in xrange(4096)]
+		self.V = [0 for x in xrange(16)]
 
 		self.delay_timer = 0
 		self.sound_timer = 0
@@ -104,8 +104,8 @@ class Chip8:
 				self.sound_timer-=1
 
 	def debugRender(self):
-		for y in range(32):
-			for x in range(64):
+		for y in xrange(32):
+			for x in xrange(64):
 				if self.gfx[(y*64)+x]:
 				   print '0',
 				else:
@@ -119,7 +119,7 @@ class Chip8:
 		app_file = open(file_name,'rb')
 		for b in app_file.read():
 			buffer_app.append(int(b.encode('hex'), 16))
-		for i in range(len(buffer_app)):
+		for i in xrange(len(buffer_app)):
 			self.memory[i+512]=buffer_app[i]
 		app_file.close()
 
@@ -182,9 +182,9 @@ class Chip8:
 
 		self.V[0xF] = 0
 		
-		for yline in range(height):
+		for yline in xrange(height):
 			pixel = self.memory[self.I+yline]
-			for xline in range(8):
+			for xline in xrange(8):
 				if (pixel & ( 0x80 >> xline)) is not 0:
 					if self.gfx[(x + xline + ((y+yline)*64))] is 1:
 						self.V[0xF] = 1
@@ -204,7 +204,7 @@ class Chip8:
 
 	'''0NNN case'''
         def x00E0(self):
-		self.gfx = [0x0 for x in range(64*32)]
+		self.gfx = [0x0 for x in xrange(64*32)]
 		self.drawFlag=True
 		self.pc+=2
         def x000E(self):
@@ -275,7 +275,7 @@ class Chip8:
         def xFX0A(self):
 		keyPress = False
 
-		for i in range(16):
+		for i in xrange(16):
 			if self.key[i] is not 0:
 				self.V[(self.opcode & 0x0F00) >> 8] = i
 				keyPress = True
@@ -304,12 +304,12 @@ class Chip8:
 		self.memory[self.I+2] = (self.V[(self.opcode & 0x0F00) >> 8] % 100) % 10
 		self.pc+=2
         def xFX65(self):
-		for i in range(((self.opcode & 0x0F00) >> 8)+1):
+		for i in xrange(((self.opcode & 0x0F00) >> 8)+1):
 			self.V[i] = self.memory[self.I+i]
 		self.I += ((self.opcode & 0x0F00) >> 8)+1
 		self.pc+=2	
         def xFX55(self):
-                for i in range(((self.opcode & 0x0F00) >> 8)+1):
+                for i in xrange(((self.opcode & 0x0F00) >> 8)+1):
                         self.memory[self.I+i] = self.V[i]
                 self.I += ((self.opcode & 0x0F00) >> 8)+1 
                 self.pc+=2

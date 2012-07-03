@@ -5,7 +5,7 @@ from OpenGL.GL import *
 scale = 10
 gfx_width  = 64*scale
 gfx_height = 32*scale
-screenData=[[[0,0,0] for x in range(64)] for y in range(32)]
+screenData=[[[0,0,0] for x in xrange(64)] for y in xrange(32)]
 
 c8= chip8.Chip8()
 
@@ -49,8 +49,8 @@ def display():
 		c8.drawFlag = False
 
 def updateQuards():
-	for y in range(32)[::-1]:
-		for x in range(64)[::-1]:
+	for y in xrange(32)[::-1]:
+		for x in xrange(64)[::-1]:
 			if c8.gfx[(y*64)+x]:
 				glColor3f(1.0, 1.0, 1.0)
 			else:
@@ -74,8 +74,8 @@ def setupTexture():
 	glEnable(GL_TEXTURE_2D);
 
 def updateTexture():
-        for y in range(32):
-                for x in range(64):
+        for y in xrange(32):
+                for x in xrange(64):
                         if c8.gfx[(y*64)+x]:
                                 screenData[y][x] = [255, 255, 255]
                         else:
