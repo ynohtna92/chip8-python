@@ -27,18 +27,24 @@ class Chip8:
 		self.opcode = 0
 		self.I = 0
 		self.sp = 0
-
+		'''
 		self.gfx = [0 for x in xrange(64*32)]
 		self.stack = [0 for x in xrange(16)]
 		self.key = [0 for x in xrange(16)]
 		self.memory = [0 for x in xrange(4096)]
 		self.V = [0 for x in xrange(16)]
+		'''
+                self.gfx = [0]*64*32
+                self.stack = [0]*16
+                self.key = [0]*16
+                self.memory = [0]*4096
+                self.V = [0]*16
 
 		self.delay_timer = 0
 		self.sound_timer = 0
 		
 		self.drawFlag = True
-		for i in range(len(chip8_fontset)):
+		for i in xrange(len(chip8_fontset)):
 			self.memory[i]= chip8_fontset[i]
 		
 		self.case_main = {
@@ -89,10 +95,14 @@ class Chip8:
 			0x0055: self.xFX55,
 			0x0065: self.xFX65,
 		}
+	def check(self):
+		for i in xrange(16):
+			if self.V[i]>=255: self.V[i] -= 256
 
 	def emulateCycle(self):
 			self.opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
 			try:
+				self.check()
 				self.case_main[self.opcode & 0xF000]()
 			except KeyError:
 				print 'opcode error'
@@ -154,8 +164,7 @@ class Chip8:
 		self.pc += 2
         def x7NNN(self):
 		self.V[(self.opcode & 0x0F00) >> 8] += self.opcode & 0x00FF
-		if (self.opcode & 0x00FF) >= 255: self.V[(self.opcode & 0x0F00) >> 8] -= (self.opcode & 0x00FF)+1
-                self.pc += 2
+		self.pc += 2
         def x8NNN(self):
                 try:
                         self.case_0x8000[self.opcode & 0x000F]()
@@ -181,14 +190,16 @@ class Chip8:
 		pixel = 0
 
 		self.V[0xF] = 0
-		
+		lo=0
 		for yline in xrange(height):
 			pixel = self.memory[self.I+yline]
 			for xline in xrange(8):
 				if (pixel & ( 0x80 >> xline)) is not 0:
-					if self.gfx[(x + xline + ((y+yline)*64))] is 1:
+					lo = x + xline + ((y+yline)*64)
+					print lo,x, y, xline , yline
+					if self.gfx[lo] is 1:
 						self.V[0xF] = 1
-					self.gfx[(x + xline + ((y+yline)*64))] ^= 1
+					self.gfx[lo] ^= 1
 		self.drawFlag = True;
 		self.pc +=2;
         def xENNN(self):
@@ -204,7 +215,7 @@ class Chip8:
 
 	'''0NNN case'''
         def x00E0(self):
-		self.gfx = [0x0 for x in xrange(64*32)]
+		self.gfx = [0]*64*32
 		self.drawFlag=True
 		self.pc+=2
         def x000E(self):
@@ -252,8 +263,9 @@ class Chip8:
 		self.V[(self.opcode & 0x0F00) >> 8] = self.V[(self.opcode & 0x00F0) >> 4] - self.V[(self.opcode & 0x0F00) >> 8]
 		self.pc+=2
         def x8XYE(self):
-		self.V[0xF] = self.V[(self.opcode & 0x0F00) >> 8] >> 7
-		self.V[(self.opcode & 0x0F00) >> 8] <<=1
+		push = (self.opcode & 0x0F00) >> 8
+		self.V[0xF] = self.V[push] >> 7
+		self.V[push] <<=1
 		self.pc+=2
 
 	'''xENNN case'''
@@ -299,9 +311,10 @@ class Chip8:
 		self.I = self.V[(self.opcode & 0x0F00) >> 8] *0x5
 		self.pc+=2
         def xFX33(self):
-		self.memory[self.I] = self.V[(self.opcode & 0x0F00) >> 8] / 100
-		self.memory[self.I+1] = (self.V[(self.opcode & 0x0F00) >> 8] / 10) % 10
-		self.memory[self.I+2] = (self.V[(self.opcode & 0x0F00) >> 8] % 100) % 10
+		push = self.V[(self.opcode & 0x0F00) >> 8]
+		self.memory[self.I] = push / 100
+		self.memory[self.I+1] = (push / 10) % 10
+		self.memory[self.I+2] = (push % 100) % 10
 		self.pc+=2
         def xFX65(self):
 		for i in xrange(((self.opcode & 0x0F00) >> 8)+1):
